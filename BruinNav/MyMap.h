@@ -60,9 +60,6 @@ public:
     MyMap& operator=(const MyMap&) = delete;
     
 private:
-    Node* freeTree(Node* current);
-    bool insertAfter(const KeyType& key, const ValueType& value, Node* node, char c);
-    
     struct Node {
         KeyType key;
         ValueType value;
@@ -70,13 +67,15 @@ private:
         Node* greaterThan = nullptr; // TODO: make it automatically point to nullptr?
     };
     
+    void freeTree(Node* current);
+    bool insertAfter(const KeyType& key, const ValueType& value, Node* node, char c = '<');
     Node* root;
-    int size;
+    int sizeOf;
 };
 
 template<typename KeyType, typename ValueType>
 MyMap<KeyType, ValueType>::MyMap() {
-    size = 0;
+    sizeOf = 0;
     root = nullptr;
 }
 
@@ -86,9 +85,9 @@ MyMap<KeyType, ValueType>::~MyMap() {
 }
 
 template<typename KeyType, typename ValueType>
-void MyMap<KeyType, ValueType>::clear() const {
+void MyMap<KeyType, ValueType>::clear() {
     freeTree(root);
-    size = 0;
+    sizeOf = 0;
 }
 
 template<typename KeyType, typename ValueType>
@@ -96,15 +95,15 @@ void MyMap<KeyType, ValueType>::freeTree(Node* current){
     if (current == nullptr)
         return;
     
-    freeTree(lessThan);
-    freeTree(greaterThan);
+    freeTree(current->lessThan);
+    freeTree(current->greaterThan);
     
     delete current;
 }
 
-template<typename KeyType, typename ValueType>
+template<typename KeyType, typename ValueType> inline
 int MyMap<KeyType, ValueType>::size() const {
-    return size;
+    return sizeOf;
 }
 
 
@@ -115,7 +114,7 @@ void MyMap<KeyType, ValueType>::associate(const KeyType& key, const ValueType& v
     // if the tree is empty
     if (size() == 0 && root == nullptr) {
         bool inserted = insertAfter(key, value, root);
-        return inserted;
+        return;
     }
     
     // atttempt to insert or replace
@@ -123,7 +122,7 @@ void MyMap<KeyType, ValueType>::associate(const KeyType& key, const ValueType& v
     while (p != nullptr) {                          // should always break beefore getting to a nullptr position
         if (key == p->key) {                        // cannot have duplicate keys, just replace the value
             p->value = value;
-            return true;
+            return;
         }
         if (key < p->key) {
             if (p->lessThan != nullptr)
@@ -145,11 +144,11 @@ void MyMap<KeyType, ValueType>::associate(const KeyType& key, const ValueType& v
         }
     }
     // no need for size++ because it's incremented in insertAfter
-    return inserted;
+    return;
 }
 
 template<typename KeyType, typename ValueType>
-bool MyMap<KeyType, ValueType>::insertAfter(const KeyType& key, const ValueType& value, Node* node, char c = '<') {   // c can only be '<' or '>' (do you insert before or after)
+bool MyMap<KeyType, ValueType>::insertAfter(const KeyType& key, const ValueType& value, Node* node, char c) {   // c can only be '<' or '>' (do you insert before or after)
     // doesn't matter what default char is because only called by default when inserting at root
     
     //make a new node
@@ -163,12 +162,12 @@ bool MyMap<KeyType, ValueType>::insertAfter(const KeyType& key, const ValueType&
     
     //if tree's empty
     if (node == nullptr) {
-        std::cerr << size();                // this should be empty
+        //std::cerr << size();                // this should be empty
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         node = toAdd;                       // should set root to toAdd
-        size++;
+        sizeOf++;
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::cerr << " " << root->value;    // should be toAdd's value
+        //std::cerr << " " << root->value;    // should be toAdd's value
         return true;
     }
     //if tree has anything in it
@@ -180,7 +179,7 @@ bool MyMap<KeyType, ValueType>::insertAfter(const KeyType& key, const ValueType&
             node->greaterThan = toAdd;
             break;
     }
-    size++;
+    sizeOf++;
     return true;                            // always
 }
 

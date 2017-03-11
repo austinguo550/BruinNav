@@ -19,75 +19,68 @@ public:
 	bool getSegment(size_t segNum, StreetSegment& seg) const;
     
 private:
+    //double stringToDouble(const string str);
+    string removeWhiteSpace(const string str);
+    
     vector<StreetSegment> streets;
 };
 
+// TODO
 MapLoaderImpl::MapLoaderImpl()
 {
 }
 
+// TODO
 MapLoaderImpl::~MapLoaderImpl()
 {
 }
 
-// TODO: write ifstream to load and then parse through file and fill in
-// 1. string streetName
-// 2. Geosegment segment
-// 3. vector<Attraction> attractions
+
 bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .txt extension in the string or do I have to add this
 {
-    ifstream infile("/Users/austinguo550/Documents/CS32 2017/BruinNav/BruinNav/" + mapFile);    // TODO: remove the path name, because linux g++ will search the current directory. TO ASK: do we need to remove this path??
+    ifstream infile(mapFile);
     if (!infile) {
         cerr << "Error: Cannot open data.txt!" << endl;
         return false;
     }
     
     string line = "";
-    int numStreetOn = 0;
-    int numAttractions = 0;
+    
     while (getline(infile, line)) { // for each street
+        StreetSegment oneStreet;
         
         // read street name
-        streets[numStreetOn].streetName = line;
+        oneStreet.streetName = line;
+        
+        char badChar;
         
         // read coordinates
-        if (getline(infile, line)) {
-            // line is now startLat, startLong, endLat, endLong
-            vector<string> tempCoordsHolder;
-            int tempCoordNum = 0;
-            string tempCoord;
-            while (infile >> tempCoord) {   // reads the next word into tempCoord excluding spaces
-                if (tempCoordNum == 0 || tempCoordNum == 2) {
-                    tempCoord = tempCoord.substr(0, tempCoord.size()-1);    // need to get rid of the comma for latitude values
-                }
-                tempCoordsHolder[tempCoordNum] = tempCoord;
-                tempCoordNum++;
-            }
-//            manually reading in, if above works then use it
-//            for (int i = 0; i < line.size(); i++) {
-//                //put startLat, startLong, endLat, endLong into the tempCoordsHolder
-//                if (line[i] == ' ') {
-//                    tempCoordsHolder[tempCoordNum] = tempCoord;
-//                    tempCoordNum++;
-//                    tempCoord = "";
-//                }
-//                else {
-//                    tempCoord += line[i];   // add the character
-//                }
-//            }
-            // set the geosegment geocoords
-            //start
-            streets[numStreetOn].segment.start.latitudeText = tempCoordsHolder[0];
-            streets[numStreetOn].segment.start.longitudeText = tempCoordsHolder[1];
-            streets[numStreetOn].segment.start.latitude = stoi(tempCoordsHolder[0]);
-            streets[numStreetOn].segment.start.longitude = stoi(tempCoordsHolder[1]);
-            
-            //end
-            streets[numStreetOn].segment.start.latitudeText = tempCoordsHolder[2];
-            streets[numStreetOn].segment.start.longitudeText = tempCoordsHolder[3];
-            streets[numStreetOn].segment.start.latitude = stoi(tempCoordsHolder[2]);
-            streets[numStreetOn].segment.start.longitude = stoi(tempCoordsHolder[3]);
+        getline(infile, line, ',');
+        line = removeWhiteSpace(line);
+        oneStreet.segment.start.latitudeText = line;
+        oneStreet.segment.start.latitude = stod(line);
+        
+        while (isspace(infile.peek())) {
+            infile >> badChar;
         }
+        getline(infile, line, ' ');
+        line = removeWhiteSpace(line);
+        oneStreet.segment.start.longitudeText = line;
+        oneStreet.segment.start.longitude = stod(line);
+        
+        getline(infile, line, ',');
+        line = removeWhiteSpace(line);
+        oneStreet.segment.end.latitudeText = line;
+        oneStreet.segment.end.latitude = stod(line);
+        
+        while (isspace(infile.peek())) {
+            infile >> badChar;
+        }
+        getline(infile, line);
+        line = removeWhiteSpace(line);
+        oneStreet.segment.end.longitudeText = line;
+        oneStreet.segment.end.longitude = stod(line);
+
         
         // read num attractions
         int k;
@@ -95,36 +88,41 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
         string attractionLat;
         string attractionLong;
         if (infile >> k) {
-            
             infile.ignore(10000, '\n');
+            
             for (int i = 0; i < k; i++) {   // for each attraction
                 
-                char c;
-                while (infile >> c && c != '|') {
-                    attraction += c;
-                }
-                streets[numStreetOn].attractions[i].name = attraction;  // name each of the attractions
+                Attraction att;
+                
+                infile.unsetf(ios_base::skipws);    // make it read whitespace
+                
+                getline(infile, attraction, '|');
+                att.name = attraction;  // name each of the attractions
+                
+                infile.setf(ios_base::skipws);  // make it skip whitespace again
                 
                 //reading the latitude/longitude of attraction
                 //when it exits the while loop, it'll be on a digit
-                if (infile >> attractionLat) {
-                    attractionLat = attractionLat.substr(0, attractionLat.size()-1); //get rid of the comma
-                    streets[numStreetOn].attractions[i].geocoordinates.latitudeText = attractionLat;
-                    streets[numStreetOn].attractions[i].geocoordinates.latitude = stoi(attractionLat);
-                }
+                getline(infile, attractionLat, ',');
+                removeWhiteSpace(attractionLat);
+                att.geocoordinates.latitudeText = attractionLat;
+                att.geocoordinates.latitude = stod(attractionLat);
                 
-                if (infile >> attractionLong) {
-                    streets[numStreetOn].attractions[i].geocoordinates.longitudeText = attractionLong;
-                    streets[numStreetOn].attractions[i].geocoordinates.longitude = stoi(attractionLong);
+                while (isspace(infile.peek())) {
+                    infile >> badChar;
                 }
+                getline(infile, attractionLong);
+                removeWhiteSpace(attractionLong);
+                att.geocoordinates.longitudeText = attractionLong;
+                att.geocoordinates.longitude = stod(attractionLong);
                 
+                oneStreet.attractions.push_back(att);
             }
-            
         }
-        
+        streets.push_back(oneStreet);
     }
     
-    return true;  // This compiles, but may not be correct
+    return true;
 }
 
 size_t MapLoaderImpl::getNumSegments() const
@@ -147,6 +145,48 @@ bool MapLoaderImpl::getSegment(size_t segNum, StreetSegment &seg) const
     return false;   // out of bounds
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// functions I created
+
+string MapLoaderImpl::removeWhiteSpace(const string str) {
+    string result = "";
+    for (int i = 0; i < str.size(); i++) {
+        if (!isspace(str[i])) {
+            result += str[i];
+        }
+    }
+    return result;
+}
+
+//// TO ASK: precision?? it has precision of 34.0434156000000029962 // the real value is 34.0434156
+//double MapLoaderImpl::stringToDouble(const string str) {
+//    double result;
+//    int decimalPos = 0;
+//    
+//    result = stoi(str);
+//    // parse until we find the decimal
+//    
+//    for (; decimalPos < str.size() && str[decimalPos] != '.'; decimalPos++) {} // move to the decimal position
+//    for (int i = decimalPos + 1, place = 1; i < str.size(); i++, place++) { // add on the decimal values
+//        double decimalPlaceMult = 1;
+//        for (int j = 0; j < place; j++) {
+//            decimalPlaceMult *= 0.10;
+//        }
+//        result += (decimalPlaceMult * (str[i] - '0'));
+//    }
+//    
+//    return result;
+//}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 //******************** MapLoader functions ************************************
 
 // These functions simply delegate to MapLoaderImpl's functions.

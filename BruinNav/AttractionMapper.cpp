@@ -1,4 +1,5 @@
 #include "provided.h"
+#include "MyMap.h"
 #include <string>
 using namespace std;
 
@@ -9,23 +10,57 @@ public:
 	~AttractionMapperImpl();
 	void init(const MapLoader& ml);
 	bool getGeoCoord(string attraction, GeoCoord& gc) const;
+    
+private:
+    MyMap<string, GeoCoord> attractionMap;
+    int numAttractions;
+    string convertToLower(const string str) const;
 };
 
+// TODO
 AttractionMapperImpl::AttractionMapperImpl()
 {
+    numAttractions = 0;
 }
 
+// TODO
 AttractionMapperImpl::~AttractionMapperImpl()
 {
 }
 
 void AttractionMapperImpl::init(const MapLoader& ml)
 {
+    StreetSegment temp;
+    for (int i = 0; i < ml.getNumSegments(); i++) {
+        if (ml.getSegment(i, temp)) {
+            for (int j = 0; j < temp.attractions.size(); j++) {
+                string attractionNameToAssociate = convertToLower(temp.attractions[j].name);
+                attractionMap.associate(attractionNameToAssociate, temp.attractions[j].geocoordinates);
+                numAttractions++;
+            }
+        }
+        
+    }
 }
 
 bool AttractionMapperImpl::getGeoCoord(string attraction, GeoCoord& gc) const
 {
-	return false;  // This compiles, but may not be correct
+    string tempAttraction = convertToLower(attraction);
+    const GeoCoord* temp = attractionMap.find(tempAttraction);
+    if (temp != nullptr) {
+        gc = *temp;
+        return true;
+    }
+    return false;
+}
+
+// added
+string AttractionMapperImpl::convertToLower(const string str) const {
+    string result = "";
+    for (int i = 0; i < str.size(); i++) {
+        result += tolower(str[i]);
+    }
+    return result;
 }
 
 //******************** AttractionMapper functions *****************************
