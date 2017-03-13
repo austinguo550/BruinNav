@@ -61,7 +61,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
         oneStreet.segment.start.latitude = stod(line);
         
         while (isspace(infile.peek())) {
-            infile >> badChar;
+            infile.get(badChar);
         }
         getline(infile, line, ' ');
         line = removeWhiteSpace(line);
@@ -74,7 +74,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
         oneStreet.segment.end.latitude = stod(line);
         
         while (isspace(infile.peek())) {
-            infile >> badChar;
+            infile.get(badChar);
         }
         getline(infile, line);
         line = removeWhiteSpace(line);
@@ -109,7 +109,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
                 att.geocoordinates.latitude = stod(attractionLat);
                 
                 while (isspace(infile.peek())) {
-                    infile >> badChar;
+                    infile.get(badChar);
                 }
                 getline(infile, attractionLong);
                 removeWhiteSpace(attractionLong);

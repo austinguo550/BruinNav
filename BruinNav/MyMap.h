@@ -20,6 +20,8 @@
 // Skeleton for the MyMap class template.  You must implement the first six
 // member functions.
 
+
+
 template<typename KeyType, typename ValueType>
 class MyMap
 {
@@ -68,10 +70,13 @@ private:
     };
     
     void freeTree(Node* current);
-    bool insertAfter(const KeyType& key, const ValueType& value, Node* node, char c = '<');
+    bool insertAfter(const KeyType& key, const ValueType& value, Node*& node, char c = '<');
     Node* root;
     int sizeOf;
+    
 };
+
+
 
 template<typename KeyType, typename ValueType>
 MyMap<KeyType, ValueType>::MyMap() {
@@ -117,7 +122,7 @@ void MyMap<KeyType, ValueType>::associate(const KeyType& key, const ValueType& v
         return;
     }
     
-    // atttempt to insert or replace
+    // attempt to insert or replace
     Node* p = root;
     while (p != nullptr) {                          // should always break beefore getting to a nullptr position
         if (key == p->key) {                        // cannot have duplicate keys, just replace the value
@@ -134,7 +139,7 @@ void MyMap<KeyType, ValueType>::associate(const KeyType& key, const ValueType& v
             continue;
         }
         if (key > p->key) {
-            if (p->greaterThan == nullptr)
+            if (p->greaterThan != nullptr)
                 p = p->greaterThan;
             else {
                 bool inserted = insertAfter(key, value, p, '>');
@@ -148,7 +153,7 @@ void MyMap<KeyType, ValueType>::associate(const KeyType& key, const ValueType& v
 }
 
 template<typename KeyType, typename ValueType>
-bool MyMap<KeyType, ValueType>::insertAfter(const KeyType& key, const ValueType& value, Node* node, char c) {   // c can only be '<' or '>' (do you insert before or after)
+bool MyMap<KeyType, ValueType>::insertAfter(const KeyType& key, const ValueType& value, Node*& node, char c) {   // c can only be '<' or '>' (do you insert before or after)
     // doesn't matter what default char is because only called by default when inserting at root
     
     //make a new node
@@ -190,7 +195,7 @@ const ValueType* MyMap<KeyType, ValueType>::find(const KeyType& key) const {
     Node* p = root;
     while (p != nullptr) {                          // should always break beefore getting to a nullptr position
         if (key == p->key) {                        // cannot have duplicate keys, just replace the value
-            break;
+            return &p->value;
         }
         if (key < p->key) {
             p = p->lessThan;
@@ -201,8 +206,11 @@ const ValueType* MyMap<KeyType, ValueType>::find(const KeyType& key) const {
             continue;
         }
     }
-    return p;
+    return nullptr;
 }
+
+
+
 
 
 #endif /* MyMap_h */

@@ -1,4 +1,4 @@
-#ifndef PROVIDED_INCLUDED
+                            #ifndef PROVIDED_INCLUDED
 #define PROVIDED_INCLUDED
 
 #include <string>
