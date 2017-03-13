@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D01468871E76832200D2BDA6 /* support.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01468861E76832200D2BDA6 /* support.cpp */; };
 		D0B4041D1E73345A00878F38 /* AttractionMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B404161E73345A00878F38 /* AttractionMapper.cpp */; };
 		D0B4041E1E73345A00878F38 /* MapLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B404181E73345A00878F38 /* MapLoader.cpp */; };
 		D0B4041F1E73345A00878F38 /* Navigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B404191E73345A00878F38 /* Navigator.cpp */; };
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D01468841E76736100D2BDA6 /* support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = support.h; sourceTree = "<group>"; };
+		D01468861E76832200D2BDA6 /* support.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = support.cpp; sourceTree = "<group>"; };
 		D0B404161E73345A00878F38 /* AttractionMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttractionMapper.cpp; sourceTree = "<group>"; };
 		D0B404171E73345A00878F38 /* mapdata.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mapdata.txt; sourceTree = "<group>"; };
 		D0B404181E73345A00878F38 /* MapLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapLoader.cpp; sourceTree = "<group>"; };
@@ -78,6 +81,8 @@
 				D0B4041A1E73345A00878F38 /* provided.h */,
 				D0B4041B1E73345A00878F38 /* SegmentMapper.cpp */,
 				D0B4041C1E73345A00878F38 /* validlocs.txt */,
+				D01468841E76736100D2BDA6 /* support.h */,
+				D01468861E76832200D2BDA6 /* support.cpp */,
 			);
 			path = BruinNav;
 			sourceTree = "<group>";
@@ -142,6 +147,7 @@
 				D0E566571E70D1810043D856 /* main.cpp in Sources */,
 				D0B4041F1E73345A00878F38 /* Navigator.cpp in Sources */,
 				D0B4041E1E73345A00878F38 /* MapLoader.cpp in Sources */,
+				D01468871E76832200D2BDA6 /* support.cpp in Sources */,
 				D0B404201E73345A00878F38 /* SegmentMapper.cpp in Sources */,
 				D0B4041D1E73345A00878F38 /* AttractionMapper.cpp in Sources */,
 			);

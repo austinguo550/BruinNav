@@ -1,45 +1,10 @@
 #include "provided.h"
 #include "MyMap.h"
 #include <vector>
+#include "support.h"
 using namespace std;
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// TODO: OPERATORS REDEFINED
-//
-bool operator>(const GeoCoord &a, const GeoCoord &b) {
-    if (a.latitude > b.latitude) {
-        return true;
-    }
-    else if (a.latitude == b.latitude) {
-        if (a.longitude > b.longitude) {
-            return true;
-        }
-    }
-    return false;
-}
 
-bool operator<(const GeoCoord &a, const GeoCoord &b) {
-    if (a.latitude < b.latitude) {
-        return true;
-    }
-    else if (a.latitude == b.latitude) {
-        if (a.longitude < b.longitude) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool operator==(const GeoCoord &a, const GeoCoord &b) {
-    if (a.latitude == b.latitude) {
-        if (a.longitude == b.longitude) {
-            return true;
-        }
-    }
-    return false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 bool operator>(const StreetSegment &a, const StreetSegment &b) {
@@ -193,6 +158,7 @@ vector<StreetSegment> SegmentMapperImpl::getSegments(const GeoCoord& gc) const
         return segments;
     }
     segments = *(segmentMaps.find(gc));
+    cerr << segmentMaps.size();
 	return segments;  // This compiles, but may not be correct
 }
 

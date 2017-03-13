@@ -1,7 +1,9 @@
 #include "provided.h"
 #include "MyMap.h"
 #include <string>
+#include "support.h"
 using namespace std;
+
 
 class AttractionMapperImpl
 {
