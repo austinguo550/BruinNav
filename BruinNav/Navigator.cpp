@@ -22,7 +22,7 @@ private:
     SegmentMapper segMap;
     AttractionMapper attractionMapper;
     
-    vector<NavNode> pathFind(string begin, string destination) const;
+    vector<GeoCoord> pathFind(string begin, string destination) const;
 };
 
 
@@ -55,7 +55,7 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
         return NAV_BAD_DESTINATION;
     }
     
-    vector<NavNode> pathToDisplay = pathFind(start, end);
+    vector<GeoCoord> pathToDisplay = pathFind(start, end);
     if (pathToDisplay.empty()) {
         return NAV_NO_ROUTE;  // This compiles, but may not be correct
     }
@@ -67,7 +67,7 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
 
 
 
-vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const {
+vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const {
     
     // write helper function to pass in GeoCoords
     GeoCoord start, goal;
@@ -76,17 +76,15 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
     
     
     priority_queue<NavNode> untriedPath;
-    //    int pqI;
-    NavNode* startNode;
-    //    Node* endNode;
+    MyMap<GeoCoord, double> nodesVisited;
     
-    vector<NavNode> pathBeforeStart;   // before starting, the path is empty
+    NavNode* startNode;
+    vector<GeoCoord> pathBeforeStart;   // before starting, the path is empty
     startNode = new NavNode(start, 0, 0, pathBeforeStart);
-    //    endNode = new Node(start, 0, 0, pathBeforeStart);
     untriedPath.push(*startNode);
     
-    MyMap<GeoCoord, double> openNodes;
-    MyMap<GeoCoord, double> nodesVisited;
+    cerr << start.latitude << ", " << start.longitude << " to " << goal.latitude << ", " << goal.longitude << endl;
+    cerr << "distance is " <<distanceEarthMiles(start, goal) << endl;
     
     
     
@@ -97,107 +95,125 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
         cerr << " Entered " << parentNode.getPriority() << endl;
         //////////////////////////////////////////////////////
         untriedPath.pop();
-        if (openNodes.find(parentNode.getGeoCoord()) != nullptr) {
-            //GeoCoord* coordToPush = new GeoCoord;
-            //*coordToPush = parentNode.getGeoCoord();
-            //openNodes.associate(*coordToPush, -1);
-            openNodes.associate(parentNode.getGeoCoord(), -1);  // not the problem with "pointer being freed was not allocated"
-        }
+        nodesVisited.associate(parentNode.getGeoCoord(), parentNode.getPriority());
+        
+//        if (openNodes.find(parentNode.getGeoCoord()) != nullptr) {
+//            //GeoCoord* coordToPush = new GeoCoord;
+//            //*coordToPush = parentNode.getGeoCoord();
+//            //openNodes.associate(*coordToPush, -1);
+//            openNodes.associate(parentNode.getGeoCoord(), -1);  // not the problem with "pointer being freed was not allocated"
+//        }
         // TODO check to see if parent is end
         
         vector<StreetSegment> successors;
         successors = segMap.getSegments(parentNode.getGeoCoord());
+
+        
+        // check to see if we've reached the goal
+        if (parentNode.getGeoCoord() == goal) {   // we've found the right path!
+            cerr << "FOUND!!" << endl;
+            return parentNode.getPath();
+        }
         
         // have a bunch of street segments
         for (int i = 0; i < successors.size(); i++) {
+            
+            
+            ///////////////////////////////////////////////////
+            // TESTING
+            if (parentNode.getGeoCoord().latitudeText == "34.0627650")
+                cerr << "HIII " << successors[i].segment.start.latitudeText << ", " << successors[i].segment.start.latitudeText<<  endl;
+            //////////////////////////////////////////////////////
+            
+            // seeing the linkage of streets tested
+            cerr << successors[i].streetName << " (" << successors[i].segment.start.latitudeText << ", " << successors[i].segment.start.longitudeText << ") " << " (" << successors[i].segment.end.latitudeText << ", " << successors[i].segment.end.longitudeText << ") " << endl;
+            
             // the successive segments produced could have either their end or start connected to the parent node
-            
-            
             GeoCoord sideToTest;
-            int numberOfSidesToTest = 1;
-            if (successors[i].segment.start == parentNode.getGeoCoord()) {
-                sideToTest = successors[i].segment.end;
-                
-                
-                
-            }
-            else if (successors[i].segment.end == parentNode.getGeoCoord()) {
-                sideToTest = successors[i].segment.start;
-                
-                
-            }
-            else {  // it's associated by the attractions
-                sideToTest = successors[i].segment.start;
-                numberOfSidesToTest = 2;
-                
-                
+            
+            for (int k = 0; k < successors[i].attractions.size(); k++) {
+                if (successors[i].attractions[k].geocoordinates == goal) {
+                    // push attractions
+                    NavNode* attractionNode = new NavNode(successors[i].attractions[k].geocoordinates, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
+                    attractionNode->nextLevel(&parentNode);
+                    attractionNode->updatePriority(goal);
+                    
+                    double*  priorPriority = nodesVisited.find(attractionNode->getGeoCoord());
+                    if (priorPriority == nullptr || (priorPriority != nullptr && attractionNode->getPriority() < *priorPriority)) {   // it hasn't been visited, or it has been and the new priority is less than
+                        untriedPath.push(*attractionNode);   // we'll try to visit it next time: it's pushed to the priority queue
+                    }
+                }
             }
             
-            for (int j = 0; j < numberOfSidesToTest; j++)
-            { // if it's associated by the attractions, it will run twice
-                if (numberOfSidesToTest == 2) {
-                    sideToTest = successors[i].segment.end;
+            if (successors[i].segment.end == parentNode.getGeoCoord()) {
+                sideToTest = successors[i].segment.start;
+            }
+            else if (successors[i].segment.start == parentNode.getGeoCoord()) {
+                sideToTest = successors[i].segment.end;
+            }
+            else {
+                sideToTest = successors[i].segment.start;
+                
+                NavNode* successor = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
+                
+                // otherwise
+                // update the node's level and get its priority
+                successor->nextLevel(&parentNode);
+                successor->updatePriority(goal);
+
+                // nodes visited
+                double*  testing = nodesVisited.find(successor->getGeoCoord());  // TODO: may have to change the name of the variable
+                if (testing == nullptr || (testing != nullptr && successor->getPriority() < *testing)) {   // it hasn't been visited, or it has been and the new priority is less than
+                    untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
                 }
                 
-//                if (nodesVisited.find(sideToTest) == nullptr) { // if the node hasn't been visited yet
+                delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
                 
-                    NavNode* successor = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
-                    
-                    // check to see if any of the attractions on this street are the goal
-                    for (int k = 0; k < successors[i].attractions.size(); k++) {
-                        if (successors[i].attractions[k].geocoordinates == goal) {
-                            return successor->getPath();
-                        }
-                    }
-                    
-                    // check to see if this street's ends are the goal
-                    if (sideToTest == goal) {   // we've found the right path!
-                        return successor->getPath();
-                    }
-                    
-                    // otherwise
-                    // update the node's level and get its priority
-                    successor->nextLevel(&parentNode);
-                    successor->updatePriority(goal);
-                    
-                    
-                    bool shouldPushToOpen = true;
-                    // open nodes
-                    double* testing = openNodes.find(successor->getGeoCoord());
-                    if (testing != nullptr && (*testing) != -1) {
-                        if (successor->getPriority() > *testing) {
-                            shouldPushToOpen = false;
-                        }
-                    }
-                    
-                    // nodes visited
-                    /*double* */ testing = nodesVisited.find(successor->getGeoCoord());  // TODO: may have to change the name of the variable
-                    if (testing != nullptr) {   // it has been visited
-                        if (successor->getPriority() > *testing) {
-                            shouldPushToOpen = false;
-                        }
-                    }
-                    
-                    if (shouldPushToOpen) {
-                        untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
-                        //GeoCoord* coordToPush = new GeoCoord;
-                        //*coordToPush = successor->getGeoCoord();
-                        //openNodes.associate(*coordToPush, successor->getPriority());
-                        openNodes.associate(successor->getGeoCoord(), successor->getPriority());
-                    }
-                    
-                    delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
-//                }
+                sideToTest = successors[i].segment.start;
+                
+                successor = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
+                
+                // otherwise
+                // update the node's level and get its priority
+                successor->nextLevel(&parentNode);
+                successor->updatePriority(goal);
+                
+                // nodes visited
+                testing = nodesVisited.find(successor->getGeoCoord());  // TODO: may have to change the name of the variable
+                if (testing == nullptr || (testing != nullptr && successor->getPriority() < *testing)) {   // it hasn't been visited, or it has been and the new priority is less than something already visited
+                    untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
+                }
+                
+                delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
+                
+                continue;
             }
+                
+            NavNode* successor = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
+            // update the node's level and get its priority
+            successor->nextLevel(&parentNode);
+            successor->updatePriority(goal);
+        
+            // nodes visited
+            double*  testing = nodesVisited.find(successor->getGeoCoord());  // TODO: may have to change the name of the variable
+            
+            if (testing == nullptr || (testing != nullptr && successor->getPriority() < *testing)) {   // it hasn't been visited, or it has been and the new priority is less than
+                
+//                ///////////////////////////////////////////////////
+//                // TESTING
+//                if (successor->getGeoCoord().latitudeText == "34.0627650")
+//                    cerr << "HIII" << endl;
+//                //////////////////////////////////////////////////////
+                untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
+            }
+            
+            delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
         }
         
-        //GeoCoord* coordToPush = new GeoCoord;
-        //*coordToPush = parentNode.getGeoCoord();
-        //nodesVisited.associate(*coordToPush, parentNode.getPriority());        // the node has been visited: no two nodes can have the same geocoord
-        nodesVisited.associate(parentNode.getGeoCoord(), parentNode.getPriority());
     }
     
-    vector<NavNode> empty;
+    cerr << "Couldn't find " << endl;
+    vector<GeoCoord> empty;
     return empty;
 }
 
@@ -205,8 +221,7 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
 // whenever pushing to the queue, set visited to true
 
 
-// when trying to get the streetsegments from the geocoords solution A,B, C, D, E,... N, just call getSegments on A, check which street has an end at B, and repeat for B∫∫∫∫
-
+// when trying to get the streetsegments from the geocoords solution A,B, C, D, E,... N, just call getSegments on A, check which street has an end at B, and repeat for B
 
 
 

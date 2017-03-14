@@ -10,6 +10,7 @@
 #define overloaded_h
 
 #include "provided.h"
+#include <vector>
 
 bool operator>(const GeoCoord &a, const GeoCoord &b);
 bool operator<(const GeoCoord &a, const GeoCoord &b);
@@ -21,12 +22,12 @@ class NavNode {
     double level;  // cost g
     // priority = `g + h (level + remaining distance estimate)
     double priority;   // smaller: higher priority
-    std::vector<NavNode> path;
+    std::vector<GeoCoord> path;
     
 public:
-    NavNode(GeoCoord gc, int l, int p, std::vector<NavNode> prevPath);
+    NavNode(GeoCoord gc, int l, int p, std::vector<GeoCoord> prevPath);
     
-    std::vector<NavNode> getPath();
+    std::vector<GeoCoord> getPath();
     
     GeoCoord getGeoCoord() const;
     
@@ -37,13 +38,11 @@ public:
     void updatePriority(GeoCoord gcEnd);
     
     void nextLevel(NavNode* previous);
+    
+    
 };
 
 bool operator<(const NavNode& a, const NavNode& b);
-
-bool operator>(const NavNode& a, const NavNode& b);
-
-bool operator==(const NavNode& a, const NavNode& b);
 
 
 #endif /* overloaded_h */

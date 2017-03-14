@@ -67,7 +67,7 @@ void example2(const MapLoader& ml) {
 
 int main(int argc, const char * argv[]) {
 //    foo();
-    // insert code here...
+//    // insert code here...
 //    MapLoader ml;
 //    ml.load("/Users/austinguo550/Documents/CS32 2017/BruinNav/BruinNav/mapdata.txt");
 //    example(ml);
@@ -75,7 +75,7 @@ int main(int argc, const char * argv[]) {
     Navigator nav;
     nav.loadMapData("/Users/austinguo550/Documents/CS32 2017/BruinNav/BruinNav/mapdata.txt");
     vector<NavSegment> directions;
-    nav.navigate("Bruin Plaza", "Century City Heliport", directions);
+    nav.navigate("Getty Center South Building", "Sproul Cove", directions);
     
     return 0;
 }

@@ -7,16 +7,17 @@
 //
 
 #include "support.h"
+#include <cmath>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// TODO: OPERATORS REDEFINED
+// TODO: CHANGE BACK TO LATITUDE/LONGITUDE instead of LATITUDE TEXT AND LONGITUDE TEXT???
 //
 bool operator>(const GeoCoord &a, const GeoCoord &b) {
-    if (a.latitude > b.latitude) {
+    if (a.latitudeText > b.latitudeText) {
         return true;
     }
-    else if (a.latitude == b.latitude) {
-        if (a.longitude > b.longitude) {
+    else if (a.latitudeText == b.latitudeText) {
+        if (a.longitudeText > b.longitudeText) {
             return true;
         }
     }
@@ -24,11 +25,11 @@ bool operator>(const GeoCoord &a, const GeoCoord &b) {
 }
 
 bool operator<(const GeoCoord &a, const GeoCoord &b) {
-    if (a.latitude < b.latitude) {
+    if (a.latitudeText < b.latitudeText) {
         return true;
     }
-    else if (a.latitude == b.latitude) {
-        if (a.longitude < b.longitude) {
+    else if (a.latitudeText == b.latitudeText) {
+        if (a.longitudeText < b.longitudeText) {
             return true;
         }
     }
@@ -36,8 +37,8 @@ bool operator<(const GeoCoord &a, const GeoCoord &b) {
 }
 
 bool operator==(const GeoCoord &a, const GeoCoord &b) {
-    if (a.latitude == b.latitude) {
-        if (a.longitude == b.longitude) {
+    if (a.latitudeText == b.latitudeText) {
+        if (a.longitudeText == b.longitudeText) {
             return true;
         }
     }
@@ -45,15 +46,15 @@ bool operator==(const GeoCoord &a, const GeoCoord &b) {
 }
 
 
-NavNode::NavNode(GeoCoord gc, int l, int p, std::vector<NavNode> prevPath) {
+NavNode::NavNode(GeoCoord gc, int l, int p, std::vector<GeoCoord> prevPath) {
     currentPos = gc;
     level = l;
     priority = p;
     path = prevPath;
-    path.push_back(*this);
+    path.push_back(gc);
 }
 
-std::vector<NavNode> NavNode::getPath() {
+std::vector<GeoCoord> NavNode::getPath() {
     return path;
 }
 
@@ -62,7 +63,7 @@ GeoCoord NavNode::getGeoCoord() const {
 }
 
 double NavNode::getLevel() const {
-    return level;
+    return level;   // g
 }
 
 double NavNode::getPriority() const {
@@ -70,14 +71,14 @@ double NavNode::getPriority() const {
 }
 
 void NavNode::updatePriority(GeoCoord gcEnd) {
-    priority = level + distanceEarthMiles(currentPos, gcEnd);
+    priority = level + distanceEarthMiles(currentPos, gcEnd);   // f = g + h
 }
 
 void NavNode::nextLevel(NavNode* previous) {
     if (previous == nullptr) {  // it's the first node, there's been no previous nodes before
         level = 0;
     }
-    level += previous->getLevel() + distanceEarthMiles(previous->getGeoCoord(), currentPos);
+    level = previous->getLevel() + fabs(distanceEarthMiles(previous->getGeoCoord(), currentPos));
 }
 
 
@@ -85,13 +86,6 @@ bool operator<(const NavNode& a, const NavNode& b) {    // if the node is less t
     return a.getPriority() > b.getPriority();
 }
 
-bool operator>(const NavNode& a, const NavNode& b) {
-    return a.getPriority() < b.getPriority();
-}
-
-bool operator==(const NavNode& a, const NavNode& b) {
-    return a.getPriority() == b.getPriority();
-}
 
 
 

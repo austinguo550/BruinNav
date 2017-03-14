@@ -148,7 +148,7 @@ void MyMap<KeyType, ValueType>::freeTree(Node* current){
     freeTree(current->lessThan);
     freeTree(current->greaterThan);
     
-    std::cerr << current << std::endl;
+//    std::cerr << current << std::endl;
     sizeOf--;
     delete current;
 }
