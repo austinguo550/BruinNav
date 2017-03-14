@@ -88,6 +88,8 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
     MyMap<GeoCoord, double> openNodes;
     MyMap<GeoCoord, double> nodesVisited;
     
+    
+    
     while (!untriedPath.empty())    // there's still something in the queue
     {
         NavNode parentNode = untriedPath.top();
@@ -115,13 +117,20 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
             int numberOfSidesToTest = 1;
             if (successors[i].segment.start == parentNode.getGeoCoord()) {
                 sideToTest = successors[i].segment.end;
+                
+                
+                
             }
             else if (successors[i].segment.end == parentNode.getGeoCoord()) {
                 sideToTest = successors[i].segment.start;
+                
+                
             }
             else {  // it's associated by the attractions
                 sideToTest = successors[i].segment.start;
                 numberOfSidesToTest = 2;
+                
+                
             }
             
             for (int j = 0; j < numberOfSidesToTest; j++)
@@ -130,20 +139,21 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
                     sideToTest = successors[i].segment.end;
                 }
                 
-                if (nodesVisited.find(sideToTest) == nullptr) { // if the node hasn't been visited yet
-                    
+//                if (nodesVisited.find(sideToTest) == nullptr) { // if the node hasn't been visited yet
+                
                     NavNode* successor = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
                     
-                    // check to see if this street end or any of the attractions on this street are the goal
-                    if (sideToTest == goal) {   // we've found the right path!
-                        nodesVisited.clear();   // about to return, must clear the mymap to avoid memory leaks
-                        return successor->getPath();
+                    // check to see if any of the attractions on this street are the goal
+                    for (int k = 0; k < successors[i].attractions.size(); k++) {
+                        if (successors[i].attractions[k].geocoordinates == goal) {
+                            return successor->getPath();
+                        }
                     }
                     
-                    // attractions
-//                    for (int k = 0; k < successors[i]) {
-//                        
-//                    }
+                    // check to see if this street's ends are the goal
+                    if (sideToTest == goal) {   // we've found the right path!
+                        return successor->getPath();
+                    }
                     
                     // otherwise
                     // update the node's level and get its priority
@@ -177,7 +187,7 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
                     }
                     
                     delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
-                }
+//                }
             }
         }
         
@@ -187,8 +197,6 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
         nodesVisited.associate(parentNode.getGeoCoord(), parentNode.getPriority());
     }
     
-    //openNodes.clear();
-    //nodesVisited.clear();   // about to return, must clear the mymap to avoid memory leaks
     vector<NavNode> empty;
     return empty;
 }

@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BruinNav/MyMap.h"
-            timestampString = "511146327.697354"
+            timestampString = "511148372.585083"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "151"
@@ -155,6 +155,84 @@
                   startingLineNumber = "148"
                   endingLineNumber = "148"
                   offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BruinNav/MyMap.h"
+            timestampString = "511147784.596966"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "~MyMap()"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, double&gt;::~MyMap()"
+                  moduleName = "BruinNav"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/austinguo550/Documents/CS32%202017/BruinNav/BruinNav/MyMap.h"
+                  timestampString = "511147794.890977"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "134"
+                  endingLineNumber = "134"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;GeoCoord, double&gt;::~MyMap()"
+                  moduleName = "BruinNav"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/austinguo550/Documents/CS32%202017/BruinNav/BruinNav/MyMap.h"
+                  timestampString = "511147794.893717"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "134"
+                  endingLineNumber = "134"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;GeoCoord, std::__1::vector&lt;StreetSegment, std::__1::allocator&lt;StreetSegment&gt; &gt; &gt;::~MyMap()"
+                  moduleName = "BruinNav"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/austinguo550/Documents/CS32%202017/BruinNav/BruinNav/MyMap.h"
+                  timestampString = "511147794.896168"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "134"
+                  endingLineNumber = "134"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyMap&lt;std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, GeoCoord&gt;::~MyMap()"
+                  moduleName = "BruinNav"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/austinguo550/Documents/CS32%202017/BruinNav/BruinNav/MyMap.h"
+                  timestampString = "511147794.89833"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "134"
+                  endingLineNumber = "134"
+                  offsetFromSymbolStart = "12">
                </Location>
             </Locations>
          </BreakpointContent>

@@ -75,7 +75,7 @@ int main(int argc, const char * argv[]) {
     Navigator nav;
     nav.loadMapData("/Users/austinguo550/Documents/CS32 2017/BruinNav/BruinNav/mapdata.txt");
     vector<NavSegment> directions;
-    nav.navigate("Fox Plaza", "Century City Heliport", directions);
+    nav.navigate("Bruin Plaza", "Century City Heliport", directions);
     
     return 0;
 }

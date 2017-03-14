@@ -142,13 +142,14 @@ void MyMap<KeyType, ValueType>::clear() {
 
 template<typename KeyType, typename ValueType>
 void MyMap<KeyType, ValueType>::freeTree(Node* current){
-    if (current == nullptr)
+    if (current == nullptr || sizeOf == 0)
         return;
     
     freeTree(current->lessThan);
     freeTree(current->greaterThan);
     
     std::cerr << current << std::endl;
+    sizeOf--;
     delete current;
 }
 
