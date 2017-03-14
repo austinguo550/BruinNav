@@ -81,12 +81,12 @@ void NavNode::nextLevel(NavNode* previous) {
 }
 
 
-bool operator<(const NavNode& a, const NavNode& b) {
-    return a.getPriority() < b.getPriority();
+bool operator<(const NavNode& a, const NavNode& b) {    // if the node is less than, then priority distance must be greater than (priority lower is better)
+    return a.getPriority() > b.getPriority();
 }
 
 bool operator>(const NavNode& a, const NavNode& b) {
-    return a.getPriority() > b.getPriority();
+    return a.getPriority() < b.getPriority();
 }
 
 bool operator==(const NavNode& a, const NavNode& b) {

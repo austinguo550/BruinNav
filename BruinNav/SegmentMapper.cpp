@@ -90,6 +90,13 @@ void SegmentMapperImpl::init(const MapLoader& ml)
             // check the attractions
             for (int k = 0; k < temp.attractions.size(); k++) {
                 //GeoCoord aCoord = temp.attractions[i].geocoordinates;
+                
+                // TODO: comment out: just checking if there's any empty string geocoordinates
+                if (temp.attractions[k].geocoordinates.latitudeText == "" || temp.attractions[k].geocoordinates.longitudeText == "") {
+                    cerr << "We have a problem in SegmentMapper: associating by attractions: failed at " << temp.streetName << " "  << temp.attractions.size() << " " << temp.attractions[i].geocoordinates.latitudeText <<" " << temp.attractions[i].geocoordinates.longitudeText << " "<< temp.attractions[i].geocoordinates.latitude << " "<< temp.attractions[i].geocoordinates.longitude << endl;
+                }
+                
+                
                 vector<StreetSegment>* ptrA = segmentMaps.find(temp.attractions[k].geocoordinates);
                 if (ptrA != nullptr) {   // there is this coord already, don't have to check if the streetname is already there because it cannot be: cannot have repeat street segments in the vector in maploader, and cannot have repeat attractions inside each streetsegment (must have unique attractions within one unique streetseg)
                     (*ptrA).push_back(temp); // push this current streetSegment onto the vector of the temporary coordinate
@@ -109,6 +116,12 @@ void SegmentMapperImpl::init(const MapLoader& ml)
             
             // checking the start coordinate
             //GeoCoord tempCoord = temp.segment.start;
+            
+            // TODO: comment out: just checking to see if there's any empty geocoordinates
+            if (temp.segment.start.latitudeText == "" || temp.segment.start.longitudeText == "" || temp.segment.end.latitudeText == "" || temp.segment.end.longitudeText == "") {
+                cerr << "We have a problem associating by start or end" << endl;
+            }
+            
             
             // find in map
             vector<StreetSegment>* ptr = segmentMaps.find(temp.segment.start);
@@ -147,7 +160,7 @@ void SegmentMapperImpl::init(const MapLoader& ml)
                 segmentMaps.associate(temp.segment.end, addStreetSeg2);
             }
         }
-        cerr << temp.streetName << " " << temp.segment.start.latitude << " " << temp.segment.end.longitude << endl;
+        //cerr << temp.streetName << " " << temp.segment.start.latitude << " " << temp.segment.end.longitude << endl;   // TODO: only for testing
     }
 }
 
@@ -158,7 +171,7 @@ vector<StreetSegment> SegmentMapperImpl::getSegments(const GeoCoord& gc) const
         return segments;
     }
     segments = *(segmentMaps.find(gc));
-    cerr << segmentMaps.size();
+    //cerr << segmentMaps.size();
 	return segments;  // This compiles, but may not be correct
 }
 

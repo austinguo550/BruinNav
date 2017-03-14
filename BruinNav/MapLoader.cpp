@@ -119,8 +119,22 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
                 oneStreet.attractions.push_back(att);
             }
         }
+        
+        
+        // TODO: comment out: only to test if we insert a GeoCoord with empty strings
+        if (oneStreet.segment.start.latitudeText == "" || oneStreet.segment.start.longitudeText == "" || oneStreet.segment.end.latitudeText == "" || oneStreet.segment.end.longitudeText == "") {
+            cerr << "We have a problem" << endl;
+        }
+        
         streets.push_back(oneStreet);
     }
+    
+//    // TODO: delete this comment: just to test if I messed up pushing streetsegments: sometimes their attractions are "" geocoord
+//    for (int i = 0; streets[segNum].attractions.size(); i++) {
+//        if (streets[segNum].attractions[i].geocoordinates.latitudeText == "" || streets[segNum].attractions[i].geocoordinates.longitudeText == "") {
+//            cerr << "We have a problem in MAPLOADER the original streets at segnum " << segNum << endl;
+//        }
+//    }
     
     return true;
 }
@@ -131,13 +145,14 @@ size_t MapLoaderImpl::getNumSegments() const
 }
 
 
-// TODO: cannot write an assignment operator, so just edit here/ make a helper function actually
+// WORKS!!! DON'T MESS WITH IT NOW!!
 bool MapLoaderImpl::getSegment(size_t segNum, StreetSegment &seg) const
 {
     if (segNum > 0 || segNum < getNumSegments()) {
         seg.streetName = streets[segNum].streetName;    // strings can be reassigned
-        seg.segment = streets[segNum].segment;  // do Geosegments have assignment operators?
-        seg.attractions = streets[segNum].attractions;  // do vectors have assignment operators?
+        seg.segment = streets[segNum].segment;
+        seg.attractions = streets[segNum].attractions;
+        
         // address of previous seg isn't changed, no new one is created, old one isn't deleted
         //seg = streets[segNum];    // CANNOT DO THIS BECAUSE NO ASSIGNMENT OPERATOR??
         return true;

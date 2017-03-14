@@ -36,6 +36,7 @@ NavigatorImpl::~NavigatorImpl()
 {
 }
 
+// TODO
 bool NavigatorImpl::loadMapData(string mapFile)
 {
     ml.load(mapFile);
@@ -90,9 +91,15 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
     while (!untriedPath.empty())    // there's still something in the queue
     {
         NavNode parentNode = untriedPath.top();
+        //////////////////////////////////////////////////////
+        cerr << " Entered " << parentNode.getPriority() << endl;
+        //////////////////////////////////////////////////////
         untriedPath.pop();
         if (openNodes.find(parentNode.getGeoCoord()) != nullptr) {
-            openNodes.associate(parentNode.getGeoCoord(), -1);
+            //GeoCoord* coordToPush = new GeoCoord;
+            //*coordToPush = parentNode.getGeoCoord();
+            //openNodes.associate(*coordToPush, -1);
+            openNodes.associate(parentNode.getGeoCoord(), -1);  // not the problem with "pointer being freed was not allocated"
         }
         // TODO check to see if parent is end
         
@@ -102,6 +109,8 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
         // have a bunch of street segments
         for (int i = 0; i < successors.size(); i++) {
             // the successive segments produced could have either their end or start connected to the parent node
+            
+            
             GeoCoord sideToTest;
             int numberOfSidesToTest = 1;
             if (successors[i].segment.start == parentNode.getGeoCoord()) {
@@ -115,7 +124,8 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
                 numberOfSidesToTest = 2;
             }
             
-            for (int j = 0; j < numberOfSidesToTest; j++) { // if it's associated by the attractions, it will run twice
+            for (int j = 0; j < numberOfSidesToTest; j++)
+            { // if it's associated by the attractions, it will run twice
                 if (numberOfSidesToTest == 2) {
                     sideToTest = successors[i].segment.end;
                 }
@@ -123,10 +133,17 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
                 if (nodesVisited.find(sideToTest) == nullptr) { // if the node hasn't been visited yet
                     
                     NavNode* successor = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
+                    
+                    // check to see if this street end or any of the attractions on this street are the goal
                     if (sideToTest == goal) {   // we've found the right path!
                         nodesVisited.clear();   // about to return, must clear the mymap to avoid memory leaks
                         return successor->getPath();
                     }
+                    
+                    // attractions
+//                    for (int k = 0; k < successors[i]) {
+//                        
+//                    }
                     
                     // otherwise
                     // update the node's level and get its priority
@@ -136,25 +153,26 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
                     
                     bool shouldPushToOpen = true;
                     // open nodes
-                    if (openNodes.find(successor->getGeoCoord()) != nullptr) {
-                        if ((*openNodes.find(successor->getGeoCoord())) != -1) {
-                            double f = *(nodesVisited.find(successor->getGeoCoord()));
-                            if (successor->getPriority() > f) {
-                                shouldPushToOpen = false;
-                            }
+                    double* testing = openNodes.find(successor->getGeoCoord());
+                    if (testing != nullptr && (*testing) != -1) {
+                        if (successor->getPriority() > *testing) {
+                            shouldPushToOpen = false;
                         }
                     }
                     
                     // nodes visited
-                    if (nodesVisited.find(successor->getGeoCoord()) != nullptr) {   // it has been visited
-                        double f = *(nodesVisited.find(successor->getGeoCoord()));
-                        if (successor->getPriority() > f) {
+                    /*double* */ testing = nodesVisited.find(successor->getGeoCoord());  // TODO: may have to change the name of the variable
+                    if (testing != nullptr) {   // it has been visited
+                        if (successor->getPriority() > *testing) {
                             shouldPushToOpen = false;
                         }
                     }
                     
                     if (shouldPushToOpen) {
                         untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
+                        //GeoCoord* coordToPush = new GeoCoord;
+                        //*coordToPush = successor->getGeoCoord();
+                        //openNodes.associate(*coordToPush, successor->getPriority());
                         openNodes.associate(successor->getGeoCoord(), successor->getPriority());
                     }
                     
@@ -163,10 +181,14 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
             }
         }
         
-        nodesVisited.associate(parentNode.getGeoCoord(), parentNode.getPriority());        // the node has been visited: no two nodes can have the same geocoord
+        //GeoCoord* coordToPush = new GeoCoord;
+        //*coordToPush = parentNode.getGeoCoord();
+        //nodesVisited.associate(*coordToPush, parentNode.getPriority());        // the node has been visited: no two nodes can have the same geocoord
+        nodesVisited.associate(parentNode.getGeoCoord(), parentNode.getPriority());
     }
     
-    nodesVisited.clear();   // about to return, must clear the mymap to avoid memory leaks
+    //openNodes.clear();
+    //nodesVisited.clear();   // about to return, must clear the mymap to avoid memory leaks
     vector<NavNode> empty;
     return empty;
 }
@@ -175,7 +197,7 @@ vector<NavNode> NavigatorImpl::pathFind(string begin, string destination) const 
 // whenever pushing to the queue, set visited to true
 
 
-// when trying to get the streetsegments from the geocoords solution A,B, C, D, E,... N, just call getSegments on A, check which street has an end at B, and repeat for B
+// when trying to get the streetsegments from the geocoords solution A,B, C, D, E,... N, just call getSegments on A, check which street has an end at B, and repeat for B∫∫∫∫
 
 
 
