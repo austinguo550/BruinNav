@@ -223,7 +223,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                 
                 delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue\
                 
-                sideToTest = successors[i].segment.start;
+                sideToTest = successors[i].segment.end;
                 
                 NavNode* successor2 = new NavNode(sideToTest, parentNode.getLevel(), parentNode.getPriority(), parentNode.getPath());
                 
