@@ -42,9 +42,9 @@ void AttractionMapperImpl::init(const MapLoader& ml)
                 numAttractions++;
                 
                 // TODO: comment out: just a test to see if there's any empty string geocoordinates
-                if (temp.attractions[j].geocoordinates.latitudeText == "" || temp.attractions[j].geocoordinates.longitudeText == "") {
-                    cerr << "We have a problem in AttractionMapper" << endl;
-                }
+//                if (temp.attractions[j].geocoordinates.latitudeText == "" || temp.attractions[j].geocoordinates.longitudeText == "") {
+//                    cerr << "We have a problem in AttractionMapper" << endl;
+//                }
             }
         }
         

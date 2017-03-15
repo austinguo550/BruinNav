@@ -14,7 +14,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "314"
-            endingLineNumber = "314">
+            endingLineNumber = "314"
+            landmarkName = "printDirections(string start, string end, vector&lt;NavSegment&gt;&amp; navSegments)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

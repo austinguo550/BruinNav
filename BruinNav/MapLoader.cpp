@@ -122,10 +122,10 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
         }
         
         
-        // TODO: comment out: only to test if we insert a GeoCoord with empty strings
-        if (oneStreet.segment.start.latitudeText == "" || oneStreet.segment.start.longitudeText == "" || oneStreet.segment.end.latitudeText == "" || oneStreet.segment.end.longitudeText == "") {
-            cerr << "We have a problem" << endl;
-        }
+//        // TODO: comment out: only to test if we insert a GeoCoord with empty strings
+//        if (oneStreet.segment.start.latitudeText == "" || oneStreet.segment.start.longitudeText == "" || oneStreet.segment.end.latitudeText == "" || oneStreet.segment.end.longitudeText == "") {
+//            cerr << "We have a problem" << endl;
+//        }
         
         streets.push_back(oneStreet);
     }

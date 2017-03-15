@@ -79,12 +79,12 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
     
     directions = generateSegments(streetsAndDistances); // convert the streetsegments and distances to navsegment directions
     
-    cerr << "IMPORTANNTTTTTTTTTTTT" << directions.size();
+//    cerr << "IMPORTANNTTTTTTTTTTTT" << directions.size();
     
-    // testing print out streets visited
-    for (int i = 0; i < streetsAndDistances->streetsToTraverse.size(); i++) {
-        cerr << "Travel " << streetsAndDistances->distancesToTraverse[i] << " miles on " << streetsAndDistances->streetsToTraverse[i].streetName << " (" << streetsAndDistances->streetsToTraverse[i].segment.start.latitudeText << ", " << streetsAndDistances->streetsToTraverse[i].segment.start.longitudeText << ") " << " (" << streetsAndDistances->streetsToTraverse[i].segment.end.latitudeText << ", " << streetsAndDistances->streetsToTraverse[i].segment.end.longitudeText << ") " << endl;
-    }
+//    // testing print out streets visited
+//    for (int i = 0; i < streetsAndDistances->streetsToTraverse.size(); i++) {
+//        cerr << "Travel " << streetsAndDistances->distancesToTraverse[i] << " miles on " << streetsAndDistances->streetsToTraverse[i].streetName << " (" << streetsAndDistances->streetsToTraverse[i].segment.start.latitudeText << ", " << streetsAndDistances->streetsToTraverse[i].segment.start.longitudeText << ") " << " (" << streetsAndDistances->streetsToTraverse[i].segment.end.latitudeText << ", " << streetsAndDistances->streetsToTraverse[i].segment.end.longitudeText << ") " << endl;
+//    }
     
     delete streetsAndDistances;
     // TODO: turn streetAndDistances into directions of navSegments
@@ -126,8 +126,8 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
     untriedPath.push(*startNode);
     delete startNode;
     
-    cerr << start.latitude << ", " << start.longitude << " to " << goal.latitude << ", " << goal.longitude << endl;
-    cerr << "distance is " <<distanceEarthMiles(start, goal) << endl;
+//    cerr << start.latitude << ", " << start.longitude << " to " << goal.latitude << ", " << goal.longitude << endl;
+//    cerr << "distance is " <<distanceEarthMiles(start, goal) << endl;
     
     
     
@@ -135,7 +135,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
     {
         NavNode parentNode = untriedPath.top();
         //////////////////////////////////////////////////////
-        cerr << " Entered " << parentNode.getPriority() << endl;
+//        cerr << " Entered " << parentNode.getPriority() << endl;
         //////////////////////////////////////////////////////
         untriedPath.pop();
         nodesVisited.associate(parentNode.getGeoCoord(), parentNode.getPriority()); // won't matter if i double associate this geocoord as visited, since it's priority won't change
@@ -154,10 +154,10 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
         
         // check to see if we've reached the goal
         if (parentNode.getGeoCoord() == goal) {   // we've found the right path!
-            cerr << "FOUND!!" << endl;
-            for (int m = 0; m < parentNode.getPath().size(); m++) {
-                cerr << (parentNode.getPath())[m].latitudeText << "," << (parentNode.getPath())[m].longitudeText << endl;
-            }
+//            cerr << "FOUND!!" << endl;
+//            for (int m = 0; m < parentNode.getPath().size(); m++) {
+//                cerr << (parentNode.getPath())[m].latitudeText << "," << (parentNode.getPath())[m].longitudeText << endl;
+//            }
             return parentNode.getPath();
         }
         
@@ -172,7 +172,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
 //            //////////////////////////////////////////////////////
             
             // seeing the linkage of streets tested
-            cerr << successors[i].streetName << " (" << successors[i].segment.start.latitudeText << ", " << successors[i].segment.start.longitudeText << ") " << " (" << successors[i].segment.end.latitudeText << ", " << successors[i].segment.end.longitudeText << ") " << endl;
+//            cerr << successors[i].streetName << " (" << successors[i].segment.start.latitudeText << ", " << successors[i].segment.start.longitudeText << ") " << " (" << successors[i].segment.end.latitudeText << ", " << successors[i].segment.end.longitudeText << ") " << endl;
             
             // the successive segments produced could have either their end or start connected to the parent node
             GeoCoord sideToTest;
@@ -188,7 +188,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                     if (priorPriority == nullptr || (priorPriority != nullptr && attractionNode->getPriority() < *priorPriority)) {   // it hasn't been visited, or it has been and the new priority is less than
 //                        cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), attractionNode->getGeoCoord()) << endl;
                         untriedPath.push(*attractionNode);   // we'll try to visit it next time: it's pushed to the priorityqueue
-                        nodesVisited.associate(attractionNode->getGeoCoord(), attractionNode->getPriority());
+//                        nodesVisited.associate(attractionNode->getGeoCoord(), attractionNode->getPriority());
                         delete attractionNode;
                     }
                 }
@@ -218,7 +218,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                 if (testing == nullptr || (testing != nullptr && successor->getPriority() < *testing)) {   // it hasn't been visited, or it has been and the new priority is less than something already visited
 //                    cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), successor->getGeoCoord()) << endl;
                     untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
-                    nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
+//                    nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
                 }
                 
                 delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue\
@@ -237,7 +237,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                 if (testing2 == nullptr || (testing2 != nullptr && successor2->getPriority() < *testing2)) {   // it hasn't been visited, or it has been and the new priority is less than
                     //                    cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), successor2->getGeoCoord()) << endl;
                     untriedPath.push(*successor2);   // we'll try to visit it next time: it's pushed to the priority queue
-                    nodesVisited.associate(successor2->getGeoCoord(), successor2->getPriority());
+//                    nodesVisited.associate(successor2->getGeoCoord(), successor2->getPriority());
                 }
                 
                 delete successor2;   // TODO: pray that it pushes a copy of the node to the priority queue
@@ -264,14 +264,14 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
 //                //////////////////////////////////////////////////////
 //                cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), successor->getGeoCoord()) << endl;
                 untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
-                nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
+//                nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
             }
             
             delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
         }
     }
     
-    cerr << "Couldn't find " << endl;
+//    cerr << "Couldn't find " << endl;
     vector<GeoCoord> empty;
     return empty;
 }
@@ -281,10 +281,10 @@ NavigatorImpl::Pair* NavigatorImpl::getStreetsAndDistances(vector<GeoCoord> geoC
     vector<StreetSegment> resultSegments;
     vector<double> resultDistances;
     
-    for (int i = 0; i < geoCoords.size();i++) {
-        cerr << i << endl;
-        //cerr << distanceEarthMiles(geoCoords[i], geoCoords[i+1]) << endl;
-    }
+//    for (int i = 0; i < geoCoords.size();i++) {
+////        cerr << i << endl;
+//        //cerr << distanceEarthMiles(geoCoords[i], geoCoords[i+1]) << endl;
+//    }
     
     
     // debug: i is to traverse geocoords, j is to traverse successor streetsegments off geocoord
@@ -349,9 +349,9 @@ vector<NavSegment> NavigatorImpl::generateSegments(Pair* data) const {
     vector<NavSegment> result;
     vector<StreetSegment> streets = data->streetsToTraverse;
     vector<double> distanceVec = data->distancesToTraverse;
-    cerr << "DISTANCE PAY ATTENTION " << distanceVec[0] << endl;
-    cerr << "DISTANCE SIZE PAY ATT " << distanceVec.size() << endl;
-    cerr << "STREETS SIZE " << streets.size() << endl;
+//    cerr << "DISTANCE PAY ATTENTION " << distanceVec[0] << endl;
+//    cerr << "DISTANCE SIZE PAY ATT " << distanceVec.size() << endl;
+//    cerr << "STREETS SIZE " << streets.size() << endl;
     string prevStreet = streets[0].streetName;
     GeoSegment geoSeg;
     double distance = 0.0;
@@ -360,13 +360,13 @@ vector<NavSegment> NavigatorImpl::generateSegments(Pair* data) const {
             // create a TURN NavSeg
             NavSegment segment(turnDirection(angleBetween2Lines(geoSeg, streets[i].segment)), streets[i].streetName);  // passing in the previous geosegment and this geosegment
             result.push_back(segment);
-            cerr << "PUSHHHHHHHHHHHHH TURN" << endl;
+//            cerr << "PUSHHHHHHHHHHHHH TURN" << endl;
             //geoSeg = streets[i].segment;
 
             prevStreet = streets[i].streetName;
             
             //testing
-            cerr << "WHY" << distance << endl;
+//            cerr << "WHY" << distance << endl;
             distance = 0;
         }
         
@@ -378,7 +378,7 @@ vector<NavSegment> NavigatorImpl::generateSegments(Pair* data) const {
         //testing
         distance = distance + distanceVec[i];
         
-        cerr << "PUSHHHHHHHHHHHHH" << endl;
+//        cerr << "PUSHHHHHHHHHHHHH" << endl;
         result.push_back(segment);
         
         

@@ -40,9 +40,9 @@ void SegmentMapperImpl::init(const MapLoader& ml)
                 //GeoCoord aCoord = temp.attractions[i].geocoordinates;
                 
                 // TODO: comment out: just checking if there's any empty string geocoordinates
-                if (temp.attractions[k].geocoordinates.latitudeText == "" || temp.attractions[k].geocoordinates.longitudeText == "") {
-                    cerr << "We have a problem in SegmentMapper: associating by attractions: failed at " << temp.streetName << " "  << temp.attractions.size() << " " << temp.attractions[i].geocoordinates.latitudeText <<" " << temp.attractions[i].geocoordinates.longitudeText << " "<< temp.attractions[i].geocoordinates.latitude << " "<< temp.attractions[i].geocoordinates.longitude << endl;
-                }
+//                if (temp.attractions[k].geocoordinates.latitudeText == "" || temp.attractions[k].geocoordinates.longitudeText == "") {
+//                    cerr << "We have a problem in SegmentMapper: associating by attractions: failed at " << temp.streetName << " "  << temp.attractions.size() << " " << temp.attractions[i].geocoordinates.latitudeText <<" " << temp.attractions[i].geocoordinates.longitudeText << " "<< temp.attractions[i].geocoordinates.latitude << " "<< temp.attractions[i].geocoordinates.longitude << endl;
+//                }
                 
                 
                 vector<StreetSegment>* ptrA = segmentMaps.find(temp.attractions[k].geocoordinates);
@@ -66,9 +66,9 @@ void SegmentMapperImpl::init(const MapLoader& ml)
             //GeoCoord tempCoord = temp.segment.start;
             
             // TODO: comment out: just checking to see if there's any empty geocoordinates
-            if (temp.segment.start.latitudeText == "" || temp.segment.start.longitudeText == "" || temp.segment.end.latitudeText == "" || temp.segment.end.longitudeText == "") {
-                cerr << "We have a problem associating by start or end" << endl;
-            }
+//            if (temp.segment.start.latitudeText == "" || temp.segment.start.longitudeText == "" || temp.segment.end.latitudeText == "" || temp.segment.end.longitudeText == "") {
+//                cerr << "We have a problem associating by start or end" << endl;
+//            }
             
             
             // find in map
