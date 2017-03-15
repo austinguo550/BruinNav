@@ -2,6 +2,7 @@
 #include "MyMap.h"
 #include <string>
 #include "support.h"
+#include <algorithm>
 using namespace std;
 
 

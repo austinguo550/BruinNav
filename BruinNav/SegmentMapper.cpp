@@ -2,60 +2,8 @@
 #include "MyMap.h"
 #include <vector>
 #include "support.h"
+#include <algorithm>
 using namespace std;
-
-
-
-
-bool operator>(const StreetSegment &a, const StreetSegment &b) {
-//    if (a.streetName > b.streetName) {
-//        return true;
-//    }
-    //else if (a.streetName == b.streetName) {
-        if (a.segment.start > b.segment.start) {
-            return true;
-        }
-        else if (a.segment.start == b.segment.start) {
-            if (a.segment.end > b.segment.end) {
-                return true;
-            }
-            // otherwise they are the same
-        }
-    //}
-    return false;
-}
-
-bool operator<(const StreetSegment &a, const StreetSegment &b) {
-//    if (a.streetName < b.streetName) {
-//        return true;
-//    }
-    //else if (a.streetName == b.streetName) {
-        if (a.segment.start < b.segment.start) {
-            return true;
-        }
-        else if (a.segment.start == b.segment.start) {
-            if (a.segment.end < b.segment.end) {
-                return true;
-            }
-            // otherwise they are the same
-        }
-    //}
-    return false;
-}
-
-bool operator==(const StreetSegment &a, const StreetSegment &b) {
-    //if (a.streetName == b.streetName) {
-        if (a.segment.start == b.segment.start) {
-            if (a.segment.end == b.segment.end) {
-                return true;
-            }
-        }
-    //}
-    return false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 class SegmentMapperImpl

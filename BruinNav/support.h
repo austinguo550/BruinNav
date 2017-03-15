@@ -45,4 +45,14 @@ public:
 bool operator<(const NavNode& a, const NavNode& b);
 
 
+bool operator>(const StreetSegment &a, const StreetSegment &b);
+
+bool operator<(const StreetSegment &a, const StreetSegment &b);
+
+bool operator==(const StreetSegment &a, const StreetSegment &b);
+
+
+std::string directionOfLine(const GeoSegment& gs);
+
+
 #endif /* overloaded_h */
