@@ -21,7 +21,8 @@ public:
     
 private:
     //double stringToDouble(const string str);
-    string removeWhiteSpace(const string str);
+    string removeWhiteSpace(const string& str);
+    string trimString(const string& str);
     
     vector<StreetSegment> streets;
 };
@@ -51,6 +52,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
         StreetSegment oneStreet;
         
         // read street name
+        line = trimString(line);
         oneStreet.streetName = line;
         
         char badChar;
@@ -98,6 +100,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
                 infile.unsetf(ios_base::skipws);    // make it read whitespace
                 
                 getline(infile, attraction, '|');
+                attraction = trimString(attraction);
                 att.name = attraction;  // name each of the attractions
                 
                 infile.setf(ios_base::skipws);  // make it skip whitespace again
@@ -165,7 +168,7 @@ bool MapLoaderImpl::getSegment(size_t segNum, StreetSegment &seg) const
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // functions I created
 
-string MapLoaderImpl::removeWhiteSpace(const string str) {
+string MapLoaderImpl::removeWhiteSpace(const string& str) {
     string result = "";
     for (int i = 0; i < str.size(); i++) {
         if (!isspace(str[i])) {
@@ -174,6 +177,17 @@ string MapLoaderImpl::removeWhiteSpace(const string str) {
     }
     return result;
 }
+
+
+string MapLoaderImpl::trimString(const string& str) {
+    const auto strStart = str.find_first_not_of(' ');
+    if (strStart == std::string::npos)
+        return ""; // no content
+    const auto strEnd = str.find_last_not_of(' ');
+    const auto strRange = strEnd - strStart + 1;
+    return str.substr(strStart, strRange);
+}
+
 
 //// TO ASK: precision?? it has precision of 34.0434156000000029962 // the real value is 34.0434156
 //double MapLoaderImpl::stringToDouble(const string str) {

@@ -64,9 +64,11 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
 {
     GeoCoord temp;
     if (!attractionMapper.getGeoCoord(start, temp)) {
+//        cerr << temp.latitudeText << ", " << temp.longitudeText;
         return NAV_BAD_SOURCE;
     }
     if (!attractionMapper.getGeoCoord(end, temp)) {
+//        cerr << temp.latitudeText << ", " << temp.longitudeText;
         return NAV_BAD_DESTINATION;
     }
     

@@ -40,11 +40,6 @@ void AttractionMapperImpl::init(const MapLoader& ml)
                 string attractionNameToAssociate = convertToLower(temp.attractions[j].name);
                 attractionMap.associate(attractionNameToAssociate, temp.attractions[j].geocoordinates);
                 numAttractions++;
-                
-                // TODO: comment out: just a test to see if there's any empty string geocoordinates
-//                if (temp.attractions[j].geocoordinates.latitudeText == "" || temp.attractions[j].geocoordinates.longitudeText == "") {
-//                    cerr << "We have a problem in AttractionMapper" << endl;
-//                }
             }
         }
         

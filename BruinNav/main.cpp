@@ -75,13 +75,13 @@
 //    Navigator nav;
 //    nav.loadMapData("/Users/austinguo550/Documents/CS32 2017/BruinNav/BruinNav/mapdata.txt");
 //    vector<NavSegment> directions;
-//    nav.navigate("Harvard-Westlake Middle School", "GreyStone Mansion", directions);
+//    nav.navigate("1061 Broxton Avenue", "Headlines!", directions);
 //    
-//    //for (int i = 0; i < directions.size(); i++) {
-//    //    if (directions[i].m_command == NavSegment::TURN) {
-//    //       cerr << directions[i].m_direction<< endl;
-//    //    }
-//    //}
+////    for (int i = 0; i < directions.size(); i++) {
+////        if (directions[i].m_command == NavSegment::TURN) {
+////           cerr << directions[i].m_direction<< endl;
+////        }
+////    }
 //
 //    return 0;
 //}
