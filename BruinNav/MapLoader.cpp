@@ -52,7 +52,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
         StreetSegment oneStreet;
         
         // read street name
-        line = trimString(line);
+//        line = trimString(line);
         oneStreet.streetName = line;
         
         char badChar;
@@ -100,7 +100,7 @@ bool MapLoaderImpl::load(string mapFile)    // TO ASK: does mapFile have the .tx
                 infile.unsetf(ios_base::skipws);    // make it read whitespace
                 
                 getline(infile, attraction, '|');
-                attraction = trimString(attraction);
+//                attraction = trimString(attraction);
                 att.name = attraction;  // name each of the attractions
                 
                 infile.setf(ios_base::skipws);  // make it skip whitespace again

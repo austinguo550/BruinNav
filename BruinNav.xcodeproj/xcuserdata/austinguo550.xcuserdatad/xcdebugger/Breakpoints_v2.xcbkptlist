@@ -10,13 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BruinNav/main.cpp"
-            timestampString = "511268423.803807"
+            timestampString = "511422368.125876"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "314"
-            endingLineNumber = "314"
-            landmarkName = "printDirections(string start, string end, vector&lt;NavSegment&gt;&amp; navSegments)"
-            landmarkType = "9">
+            startingLineNumber = "310"
+            endingLineNumber = "310">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -26,23 +24,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BruinNav/Navigator.cpp"
-            timestampString = "511347253.333063"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
-            landmarkName = "NavigatorImpl::pathFind(string begin, string destination)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BruinNav/Navigator.cpp"
-            timestampString = "511347253.333063"
+            timestampString = "511414912.268225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "169"
@@ -58,11 +40,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BruinNav/Navigator.cpp"
-            timestampString = "511347253.333063"
+            timestampString = "511414912.268225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "NavigatorImpl::pathFind(string begin, string destination)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +56,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BruinNav/Navigator.cpp"
-            timestampString = "511347253.333063"
+            timestampString = "511414912.268225"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "NavigatorImpl::pathFind(string begin, string destination)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BruinNav/Navigator.cpp"
+            timestampString = "511414912.268225"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "NavigatorImpl::pathFind(string begin, string destination)"
             landmarkType = "7">
          </BreakpointContent>

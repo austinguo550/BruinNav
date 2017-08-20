@@ -119,6 +119,13 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
     attractionMapper.getGeoCoord(destination, goal);
     
     
+    if (start == goal) {
+        vector<GeoCoord> noDistance;
+        noDistance.push_back(start);
+        return noDistance;
+    }
+    
+    
     priority_queue<NavNode> untriedPath;
     MyMap<GeoCoord, double> nodesVisited;
     
@@ -174,7 +181,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
 //            //////////////////////////////////////////////////////
             
             // seeing the linkage of streets tested
-//            cerr << successors[i].streetName << " (" << successors[i].segment.start.latitudeText << ", " << successors[i].segment.start.longitudeText << ") " << " (" << successors[i].segment.end.latitudeText << ", " << successors[i].segment.end.longitudeText << ") " << endl;
+            cerr << successors[i].streetName << " (" << successors[i].segment.start.latitudeText << ", " << successors[i].segment.start.longitudeText << ") " << " (" << successors[i].segment.end.latitudeText << ", " << successors[i].segment.end.longitudeText << ") " << endl;
             
             // the successive segments produced could have either their end or start connected to the parent node
             GeoCoord sideToTest;
@@ -190,7 +197,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                     if (priorPriority == nullptr || (priorPriority != nullptr && attractionNode->getPriority() < *priorPriority)) {   // it hasn't been visited, or it has been and the new priority is less than
 //                        cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), attractionNode->getGeoCoord()) << endl;
                         untriedPath.push(*attractionNode);   // we'll try to visit it next time: it's pushed to the priorityqueue
-//                        nodesVisited.associate(attractionNode->getGeoCoord(), attractionNode->getPriority());
+                        nodesVisited.associate(attractionNode->getGeoCoord(), attractionNode->getPriority());
                         delete attractionNode;
                     }
                 }
@@ -220,7 +227,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                 if (testing == nullptr || (testing != nullptr && successor->getPriority() < *testing)) {   // it hasn't been visited, or it has been and the new priority is less than something already visited
 //                    cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), successor->getGeoCoord()) << endl;
                     untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
-//                    nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
+                    nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
                 }
                 
                 delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue\
@@ -239,7 +246,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
                 if (testing2 == nullptr || (testing2 != nullptr && successor2->getPriority() < *testing2)) {   // it hasn't been visited, or it has been and the new priority is less than
                     //                    cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), successor2->getGeoCoord()) << endl;
                     untriedPath.push(*successor2);   // we'll try to visit it next time: it's pushed to the priority queue
-//                    nodesVisited.associate(successor2->getGeoCoord(), successor2->getPriority());
+                    nodesVisited.associate(successor2->getGeoCoord(), successor2->getPriority());
                 }
                 
                 delete successor2;   // TODO: pray that it pushes a copy of the node to the priority queue
@@ -266,7 +273,7 @@ vector<GeoCoord> NavigatorImpl::pathFind(string begin, string destination) const
 //                //////////////////////////////////////////////////////
 //                cerr << "a to b is " << distanceEarthMiles(parentNode.getGeoCoord(), successor->getGeoCoord()) << endl;
                 untriedPath.push(*successor);   // we'll try to visit it next time: it's pushed to the priority queue
-//                nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
+                nodesVisited.associate(successor->getGeoCoord(), successor->getPriority());
             }
             
             delete successor;   // TODO: pray that it pushes a copy of the node to the priority queue
@@ -287,6 +294,15 @@ NavigatorImpl::Pair* NavigatorImpl::getStreetsAndDistances(vector<GeoCoord> geoC
 ////        cerr << i << endl;
 //        //cerr << distanceEarthMiles(geoCoords[i], geoCoords[i+1]) << endl;
 //    }
+
+    if (geoCoords.size() == 1) {
+        resultSegments.push_back(segMap.getSegments(geoCoords[0])[0]);
+        resultDistances.push_back(0);
+        Pair* result = new Pair;
+        result->streetsToTraverse = resultSegments;
+        result->distancesToTraverse = resultDistances;
+        return result;
+    }
     
     
     // debug: i is to traverse geocoords, j is to traverse successor streetsegments off geocoord
@@ -354,6 +370,16 @@ vector<NavSegment> NavigatorImpl::generateSegments(Pair* data) const {
 //    cerr << "DISTANCE PAY ATTENTION " << distanceVec[0] << endl;
 //    cerr << "DISTANCE SIZE PAY ATT " << distanceVec.size() << endl;
 //    cerr << "STREETS SIZE " << streets.size() << endl;
+    
+    if (streets.empty()) {
+        GeoSegment geoSeg;
+        geoSeg = streets[0].segment;
+        NavSegment noDist(directionOfLine(geoSeg), streets[0].streetName, distanceVec[0], geoSeg);
+        result.push_back(noDist);
+        return result;
+    }
+    
+    
     string prevStreet = streets[0].streetName;
     GeoSegment geoSeg;
     double distance = 0.0;
